@@ -11,104 +11,10 @@
 
 <!-- Latest compiled JavaScript -->
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<style>
-textarea{
-  width:400px;
-  height:400px;
-}
-.hideme{
-  display:none;
-}
-</style>
+
 </head>
 <body>
   <div class="container">
-  <h1>Schema Expander</h1>
-  <div class="row">
-    <div class="col-xs-6">
-      Copy the code (like the sample below) you'd like to expand to the right.
-      <blockquote>
-        {<br/>
-        "type": "header",<br/>
-        "content": "Slide 1"<br/>
-      },<br/>
-      {<br/>
-        "type": "checkbox",<br/>
-        "id": "hero_slide_1_enable",<br/>
-        "label": "Enable"<br/>
-      },<br/>
-      {<br/>
-        "type": "image",<br/>
-        "id": "hero_slide_1.jpg",<br/>
-        "label": "Image",<br/>
-        "info": "1200px wide required"<br/>
-      },
-    </blockquote>
-    </div>
-    <div class="col-xs-6">
-      <label for="start" title="Code to Expand"/>
-      <textarea id="start"></textarea>
-    </div>
+    <a href="schema_expander.html">Schema Expander</a>
   </div>
-  <div class="row">
-    <div class="col-xs-12">
-  <div class="alert alert-danger">
-  Don't forget the comma at the end!
-</div>
-</div>
-</div>
-  <div class="row">
-    <div class="col-xs-6">
-      Current iteration (would be 1 in the above example)
-    </div>
-    <div class="col-xs-6">
-      <label for="current" title="Current Iteration"/>
-      <input id="current"/>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-xs-6">
-      Final iteration (What is the final interation you'd like?)
-    </div>
-    <div class="col-xs-6">
-      <label for="final" title="Final Iteration"/>
-      <input id="final"/>
-    </div>
-  </div>
-  <div class="row" id="submit_row">
-    <div class="col-xs-12">
-      <button class="btn-primary" id="expand-it">Expand It!</button>
-    </div>
-  </div>
-  <div class="row hideme" id="output_row">
-    <div class="col-xs-6">
-      Copy this code to your schema file.
-    </div>
-    <div class="col-xs-6">
-      <label for="output" title="Output"/>
-      <textarea id="output"></textarea>
-    </div>
-  </div>
-</div>
 </body>
-<script>
-$('#expand-it').click(function(){
-var current=$('#current').val(),
-final=$('#final').val(),
-return_text = "";
-    for (i = current; i <= final; i++) {
-      var lines = $('#start').val().split('\n');
-      $.each(lines,function(){
-        var check = this.split(":");
-        if (check[0].indexOf('info') > -1 ){
-        return_text += this + "\n";
-      }
-      else{
-        return_text += this.replace(current, i) + "\n";
-      }
-      });
-    };
-$('#output').val(return_text);
-$('#output_row').show();
-});
-</script>
