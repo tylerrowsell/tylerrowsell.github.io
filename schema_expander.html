@@ -100,7 +100,7 @@ return_text = "";
       var lines = $('#start').val().split('\n');
       $.each(lines,function(){
         var check = this.split(":");
-        if (check[0].indexOf('info') > -1 ){
+        if (check[0].indexOf('info') > -1 || check[0].indexOf('max-width') > -1 ){
         return_text += this + "\n";
       }
       else{
