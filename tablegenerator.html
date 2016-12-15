@@ -9,9 +9,8 @@
             width: 100%;
             height: 300px;
         }
-        
-        #output {
-            font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+        #output{
+          font-family:Consolas, "Liberation Mono", Menlo, Courier, monospace;
         }
     </style>
 </head>
@@ -20,9 +19,9 @@
     <div class="container">
         <h1>Responsive Table Generator</h1>
         <ol>
-            <li>Use the RTE editor below to create your table.</li>
-            <li> Take a look at the image below to decide how you would like your table to display on mobile</li>
-            <li>Click the appropriate button to get the code!</li>
+          <li>Use the RTE editor below to create your table.</li>
+          <li> Take a look at the image below to decide how you would like your table to display on mobile</li>
+          <li>Click the appropriate button to get the code!</li>
         </ol>
         <textarea class="rte" name="editor"></textarea>
         <div class="hide" id="rte"></div>
@@ -37,7 +36,6 @@
         <script>
             CKEDITOR.replace('editor');
         </script>
-
         <script>
             $('#output').hide();
             $('button').click(function() {
@@ -60,13 +58,16 @@
                             for (var j = 0; j < Row.cells.length; j++) {
                                 var grid_item = document.createElement("DIV");
                                 var Cell = Row.cells[j];
-                                $(grid_item).addClass("grid-item").addClass("large--" + grid_size(Row_Size, Cell.colSpan) + " medium-down--hide")
+                                if(type=="vertical"){
+                                $(grid_item).addClass("grid-item").addClass("large--" + grid_size(Row_Size, Cell.colSpan) + " medium-down--hide")}else{
+                                $(grid_item).addClass("grid-item").addClass("large--" + grid_size(Row_Size, Cell.colSpan));  
+                                }
                                 $(grid_item).append(Cell.innerHTML);
                                 for (q = 0; q < Cell.attributes.length; q++) {
                                     var a = Cell.attributes[i];
                                     $(grid_item).attr(a.name, a.value);
                                 }
-                                $(Grid).append($(grid_item).prop("outerHTML") + "\n");
+                                $(Grid).append($(grid_item).prop("outerHTML")+ "\n");
                             }
                         }
                     }
@@ -90,10 +91,10 @@
                                     $(grid_item).addClass("grid-item").addClass("large--hide medium-down--one-whole")
                                     $(grid_item).append(Cell.innerHTML);
                                     for (q = 0; q < Cell.attributes.length; q++) {
-                                        var a = Cell.attributes[i];
-                                        $(grid_item).attr(a.name, a.value);
-                                    }
-                                    $(Grid).append($(grid_item).prop("outerHTML") + "\n");
+                                    var a = Cell.attributes[i];
+                                    $(grid_item).attr(a.name, a.value);
+                                }
+                                    $(Grid).append($(grid_item).prop("outerHTML")+ "\n");
                                 }
                             }
                         }
