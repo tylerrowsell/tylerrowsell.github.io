@@ -1,0 +1,212 @@
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://cdn.ckeditor.com/4.6.1/standard/ckeditor.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <style>
+  #output,.rte{
+    width:100%;
+    height:300px;
+  }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+  <h1>Responsive Table Generator</h1>
+  <p>Use the RTE editor below to create your table. Take a look at the image below to decide how you would like your table to display on mobile and then click that button to get the code!</p>
+  <p><img src="images/focus.jpg"/></p>
+  <textarea class="rte" name="editor"><table border="1" cellpadding="1" cellspacing="1" style="width:500px">
+	<tbody>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+	</tbody>
+</table></textarea>
+  <div class="hide" id="rte"></div>
+  <p class="text-right"><div class="btn-group">
+  <button id="horizontal" type="button" class="btn btn-success">Horizontal Focus</button>
+  <button id="vertical" type="button" class="btn btn-success">Vertical Focus</button>
+</div>
+</p>
+<textarea id="output" name="editor"></textarea>
+        <script>
+            CKEDITOR.replace( 'editor' );
+        </script>
+
+<script>
+$('#output').hide();
+$('#horizontal').click(function() {
+$('#rte').append(CKEDITOR.instances.editor.getData());
+var Tables = $('#rte').find('table');
+var Grid = document.createElement("DIV");
+$(Grid).addClass("grid-uniform");
+if (Tables.length > 0){
+for(var k=0; k < Tables.length; k++){
+var Table = Tables[k];
+for (var i = 0; i < Table.rows.length; i++) {
+  var Row = Table.rows[i];
+  var Row_Size = 0;
+   for (var j = 0; j < Row.cells.length; j++) {
+     var Cell = Row.cells[j];
+     Row_Size += Cell.colSpan;
+   }
+   for (var j = 0; j < Row.cells.length; j++) {
+     var grid_item = document.createElement("DIV");
+     var Cell = Row.cells[j];
+     $(grid_item).addClass("grid-item").addClass("large--"+grid_size(Row_Size, Cell.colSpan)+" medium-down--one-whole")
+     $(grid_item).append(Cell.innerHTML);
+     $(grid_item).attr("class", $(Cell).attr("class"));
+     $(grid_item).attr("style", $(Cell).attr("style"));
+     $(Grid).append(grid_item);
+   }
+}
+}
+}
+$('#output').val($(Grid).prop('outerHTML'));
+$('#output').show();
+$('img').hide();
+$('#rte').html("");
+$(Grid).innerHTML = "";
+  });
+  $('#vertical').click(function() {
+  $('#rte').append(CKEDITOR.instances.editor.getData());
+  var Tables = $('#rte').find('table');
+  var Grid = document.createElement("DIV");
+  $(Grid).addClass("grid-uniform");
+  var column_max = 0;
+  if (Tables.length > 0){
+    for(var k=0; k < Tables.length; k++){
+    var Table = Tables[k];
+    for (var i = 0; i < Table.rows.length; i++) {
+      var Row = Table.rows[i];
+      var Row_Size = 0;
+       for (var j = 0; j < Row.cells.length; j++) {
+         var Cell = Row.cells[j];
+         Row_Size += Cell.colSpan;
+       }
+       for (var j = 0; j < Row.cells.length; j++) {
+         var grid_item = document.createElement("DIV");
+         var Cell = Row.cells[j];
+         $(grid_item).addClass("grid-item").addClass("large--"+grid_size(Row_Size, Cell.colSpan)+" medium-down--hide")
+         $(grid_item).append(Cell.innerHTML);
+         $(grid_item).attr("class", $(Cell).attr("class"));
+         $(grid_item).attr("style", $(Cell).attr("style"));
+         $(Grid).append(grid_item);
+       }
+    }
+    }
+  for(var k=0; k < Tables.length; k++){
+  var Table = Tables[k];
+  for (var i = 0; i < Table.rows.length; i++) {
+    var Row = Table.rows[i];
+    if (column_max < Row.cells.length){
+      column_max = Row.cells.length;
+    }
+  }
+  }
+  for(var k=0; k < Tables.length; k++){
+  var Table = Tables[k];
+  for (var j = 0; j < column_max; j++) {
+  for (var i = 0; i < Table.rows.length; i++) {
+    var Row = Table.rows[i];
+       var grid_item = document.createElement("DIV");
+       var Cell = Row.cells[j];
+       $(grid_item).addClass("grid-item").addClass("large--hide medium-down--one-whole")
+       $(grid_item).append(Cell.innerHTML);
+       $(grid_item).attr("class", $(Cell).attr("class"));
+       $(grid_item).attr("style", $(Cell).attr("style"));
+       $(Grid).append(grid_item);
+     }
+  }
+  }
+  }
+  $('#output').val($(Grid).prop('outerHTML'));
+  $('#output').show();
+  $('img').hide();
+  $('#rte').html("");
+  $(Grid).innerHTML = "";
+    });
+
+function grid_size(Row_size, Cell_size){
+var ratio = (Cell_size/Row_size).toFixed(2)*100;
+var size;
+switch (ratio) {
+    case 100:
+        size = "one-whole";
+        break;
+    case 90:
+        size = "nine-tenths";
+        break;
+    case 88:
+        size = "seven-eighths";
+        break;
+    case 83:
+        size = "five-sixths";
+        break;
+    case 80:
+        size = "four-fifths";
+        break;
+    case 75:
+        size = "three-quarter";
+        break;
+    case 67:
+        size = "two-thirds";
+        break;
+    case 63:
+        size = "five-eighths";
+        break;
+    case 60:
+        size = "three-fifths";
+        break;
+    case 58:
+        size = "seven-twelfths";
+        break;
+    case 50:
+        size = "one-half";
+        break;
+    case 42:
+        size = "five-twelfths";
+        break;
+    case 40:
+        size = "two-fifths";
+        break;
+    case 38:
+        size = "three-eigths";
+        break;
+    case 33:
+        size = "one-third";
+        break;
+    case 25:
+        size = "one-quarter";
+        break;
+    case 20:
+        size = "one-fifth";
+        break;
+    case 17:
+        size = "one-sixth";
+        break;
+    case 13:
+        size = "one-eighth";
+        break;
+    case 10:
+        size = "one-tenth";
+        break;
+    case 8:
+        size = "one-twelfth";
+        break;
+}
+return size;
+}
+</script>
+</div>
+</body>
