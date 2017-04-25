@@ -1,0 +1,160 @@
+<div class="wrapper">
+  {% if section.settings.title != blank %}
+  <div class="section-header text-center">
+    <h2 class="h1 section-header__title">{{ section.settings.title }}</h2>
+    <hr class="hr--small">
+  </div>
+  {% endif %}
+  {% case section.settings.count %}
+  {% when '2' %}
+  {%- assign grid_item_width = 'medium--one-half large--one-half' -%}
+  {% when '3' %}
+  {%- assign grid_item_width = 'small--one-half medium--one-third large--one-third' -%}
+  {% when '4' %}
+  {%- assign grid_item_width = 'small--one-half medium--one-quarter large--one-quarter' -%}
+  {% when '5' %}
+  {%- assign grid_item_width = 'small--one-half medium--one-fifth large--one-fifth' -%}
+  {% when '6' %}
+  {%- assign grid_item_width = 'small--one-half medium--one-third large--one-third' -%}
+  {% when '7' %}
+  {%- assign grid_item_width = 'small--one-half medium--one-quarter large--one-quarter' -%}
+  {% when '8' %}
+  {%- assign grid_item_width = 'small--one-half medium--one-quarter large--one-quarter' -%}
+  {% when '9' %}
+  {%- assign grid_item_width = 'small--one-half medium--one-fifth large--one-fifth' -%}
+  {% when '10' %}
+  {%- assign grid_item_width = 'small--one-half medium--one-fifth large--one-fifth' -%}
+  {% endcase %}
+
+
+  <div class="grid collection-grid" id="randomCollectionWrapper">
+
+
+
+  </div>
+</div>
+
+<div class="grid__item {{ grid_item_width }} collection-collage__item text-center hide" id="randomCollection">
+  <a href="{{ collections[collection_handle].url }}" class="collection-grid__item-link collection-collage__item-wrapper">
+    <div class="collection-grid__item-overlay grid__image grid__image--responsive"></div>
+
+    <style>
+      @media screen and (min-width: 601px) {
+        .grid__image--responsive {
+          background-image: url('');
+        }
+      }
+    </style>
+    <div class="collection-grid__item-title--wrapper">
+      <span class="collection-grid__item-title">
+        {{ collection_title }}
+      </span>
+    </div>
+  </a>
+</div>
+
+<script>
+
+  function successCallback(data) {
+    var size = data.collections.length;
+    var limit = {{section.settings.count}},
+        amount = {{section.settings.count}},
+        lower_bound = 0,
+        upper_bound = size-1,
+        unique_random_numbers = [];
+
+    if (amount > limit) limit = amount; //Infinite loop if you want more unique
+    //Natural numbers than existemt in a
+    // given range
+    while (unique_random_numbers.length < limit) {
+      var random_number = Math.round(Math.random()*(upper_bound - lower_bound) + lower_bound);
+      if (unique_random_numbers.indexOf(random_number) == -1) { 
+        unique_random_numbers.push( random_number );
+      }
+    }
+
+    $.each(unique_random_numbers , function( key, value ) {
+      $('#randomCollection').clone().removeClass("hide").attr("id", "randomCollection"+key).appendTo("#randomCollectionWrapper");
+      $("#randomCollection"+key+" .grid__image--responsive").css("background-image","url('"+data.collections[value].image.src+"')");
+      $("#randomCollection"+key+" .collection-grid__item-title").html(data.collections[value].title);
+    });
+
+  }
+
+  $.ajax({
+    url: "/collections.json",
+    dataType: "json",
+    success: function(data) {
+      successCallback(data);
+    }
+  });
+
+
+
+</script>
+
+{% schema %}
+  {
+    "name": "Random Collections",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Collection list"
+      },
+	  {"type": "select",
+        "id": "count",
+        "label": "Show Products",
+        "options": [
+          {
+            "value": "1",
+            "label": "1"
+          },
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          },
+          {
+            "value": "5",
+            "label": "5"
+          },
+          {
+            "value": "6",
+            "label": "6"
+          },
+          {
+            "value": "7",
+            "label": "7"
+          },
+          {
+            "value": "8",
+            "label": "8"
+          },
+          {
+            "value": "9",
+            "label": "9"
+          },
+          {
+            "value": "10",
+            "label": "10"
+          }
+		]
+	}
+
+    ],
+    "presets": [{
+      "name": "Collection list",
+      "category": "Collection"
+      }
+    ]
+  }
+{% endschema %}
